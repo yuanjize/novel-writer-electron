@@ -1,0 +1,39 @@
+{
+  "name": "novel-writer-electron",
+  "version": "1.0.0",
+  "description": "AI-powered novel writing application",
+  "main": "./out/main/index.js",
+  "author": "",
+  "license": "MIT",
+  "scripts": {
+    "dev": "node scripts/electron-vite.js dev",
+    "build": "node scripts/electron-vite.js build",
+    "preview": "node scripts/electron-vite.js preview",
+    "build:win": "npm run build && electron-builder --win",
+    "build:mac": "npm run build && electron-builder --mac",
+    "build:linux": "npm run build && electron-builder --linux"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^5.5.2",
+    "@anthropic-ai/claude-agent-sdk": "^0.1.76",
+    "antd": "^5.22.6",
+    "better-sqlite3": "^11.10.0",
+    "dotenv": "^17.2.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.30.2",
+    "use-sync-external-store": "^1.6.0",
+    "zustand": "^5.0.9"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/react": "^19.0.6",
+    "@types/react-dom": "^19.0.2",
+    "@vitejs/plugin-react": "^4.3.4",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "electron-vite": "^2.3.0",
+    "typescript": "^5.7.2",
+    "vite": "^5.4.11"
+  }
+}

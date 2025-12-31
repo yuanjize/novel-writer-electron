@@ -1,0 +1,157 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background:
+    radial-gradient(80% 60% at 0% 0%, rgba(238, 242, 255, 0.9) 0%, rgba(238, 242, 255, 0) 60%),
+    radial-gradient(70% 60% at 100% 20%, rgba(253, 242, 248, 0.9) 0%, rgba(253, 242, 248, 0) 55%),
+    radial-gradient(70% 60% at 30% 100%, rgba(240, 253, 250, 0.9) 0%, rgba(240, 253, 250, 0) 55%),
+    #f8fafc;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+.appShell {
+  min-height: 100vh;
+  background: transparent;
+}
+
+.appHeader {
+  background: rgba(15, 23, 42, 0.82);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  -webkit-app-region: drag;
+}
+
+.appHeaderInner {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.appBrand {
+  -webkit-app-region: no-drag;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 10px 10px;
+  border-radius: 12px;
+  color: #fff;
+}
+
+.appBrand:hover {
+  background: rgba(148, 163, 184, 0.18);
+}
+
+.appBrandIcon {
+  font-size: 22px;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.appBrandText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.appBrandTitle {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.2px;
+}
+
+.appBrandSubtitle {
+  font-size: 12px;
+  line-height: 1.1;
+  color: rgba(226, 232, 240, 0.85) !important;
+}
+
+.appContent {
+  padding: 22px 22px 28px;
+  background: transparent;
+}
+
+.appContentInner {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.appSuspense {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Subtle elevation + rounded corners for cards */
+.ant-card {
+  border-radius: 16px;
+  border-color: rgba(15, 23, 42, 0.06);
+  box-shadow: 0 10px 30px rgba(2, 6, 23, 0.06);
+}
+
+.ant-card-hoverable:hover {
+  box-shadow: 0 14px 40px rgba(2, 6, 23, 0.12);
+}
+
+.centeredFill {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.pageHeaderMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pageTitle {
+  margin: 0 !important;
+}
+
+.pageHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.projectGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
