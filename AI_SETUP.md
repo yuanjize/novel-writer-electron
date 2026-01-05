@@ -67,20 +67,20 @@ npm run dev
 
 ## ⚠️ 注意事项
 
-- AI 功能需要网络连接
-- API 调用会产生费用（具体参考 Anthropic 定价）
+- 云端模式需要网络连接；本地 Ollama 可离线使用
+- 云端 API 调用会产生费用（具体参考 Anthropic 定价）
 - 建议先在 [Anthropic Console](https://console.anthropic.com/) 查看使用量和费用
 - API Key 请妥善保管，不要提交到公开仓库
 
 ## 🔧 故障排除
 
 ### AI 功能不可用
-如果看到 "AI 服务不可用，请配置 ANTHROPIC_API_KEY" 错误：
+如果看到类似提示（例如 “AI 服务不可用，请在 AI 设置中配置云端 API Key 或切换到本地 Ollama”）：
 
-1. 检查 `.env` 文件是否存在
-2. 确认 API Key 是否正确
-3. 重启 Electron 应用
-4. 查看控制台是否有其他错误信息
+1. 打开应用里的「AI 设置」（右上角 / 章节编辑器顶部工具栏），检查 Provider / Model / Base URL
+2. Anthropic：确认 API Key 是否有效；如使用兼容网关，确认 Base URL 正确可访问
+3. Ollama：确认本地服务已启动（默认 `http://127.0.0.1:11434`），且模型已拉取（如 `ollama pull llama3.1`）
+4. 如果你修改了 `.env` 但不生效：检查是否已经生成配置文件（配置文件优先级更高，可在「AI 设置」中看到路径）
 
 ### API 调用失败
 如果 AI 功能报错：
@@ -92,22 +92,11 @@ npm run dev
 
 ## 💡 进阶配置
 
-### 自定义模型
+- 推荐通过应用内「AI 设置」修改 Provider / Base URL / Model（会写入配置文件，优先级高于 `.env`）。
+- 如需使用 `.env`，请参考 `.env.example`（仅在未生成配置文件时生效）。
 
-在 `main/services/ai-service.ts` 中可以修改使用的模型：
-
-```typescript
-this.agent = new Agent({
-  apiKey: this.apiKey,
-  modelName: 'claude-3-5-sonnet-20241022' // 可选其他模型
-})
-```
-
-可选模型：
-- `claude-3-5-sonnet-20241022` (推荐，平衡性能和成本)
-- `claude-3-5-haiku-20241022` (更快，成本更低)
-- `claude-3-opus-20240229` (最强，但成本较高)
-
-### 调整系统提示词
-
-在 `ai-service.ts` 的 `buildSystemPrompt` 方法中可以自定义 AI 的行为和风格。
+常用环境变量：
+- `AI_PROVIDER=anthropic|ollama`
+- Anthropic：`ANTHROPIC_API_KEY` / `ANTHROPIC_BASE_URL` / `ANTHROPIC_MODEL`
+- Ollama：`OLLAMA_BASE_URL` / `OLLAMA_MODEL`
+- 高级：`AI_MAX_RETRIES` / `AI_TIMEOUT` / `AI_DEBUG`

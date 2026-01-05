@@ -2,67 +2,47 @@ import { createWithEqualityFn } from 'zustand/traditional'
 import type { Project, Chapter } from '../types'
 
 interface AppState {
-  // 项目相关状态
-  projects: Project[]
-  currentProject: Project | null
   error: string | null
 
-  // 章节相关状态
+  projects: Project[]
   chapters: Chapter[]
+
+  currentProject: Project | null
   currentChapter: Chapter | null
+  openChapters: Chapter[] // 700 轮优化：支持多标签页
 
-  // Actions - 项目
-  setProjects: (projects: Project[]) => void
-  setCurrentProject: (project: Project | null) => void
   setError: (error: string | null) => void
-  addProject: (project: Project) => void
-  updateProject: (project: Project) => void
-  removeProject: (id: number) => void
-
-  // Actions - 章节
+  setProjects: (projects: Project[]) => void
+  removeProject: (projectId: number) => void
   setChapters: (chapters: Chapter[]) => void
+  setCurrentProject: (project: Project | null) => void
   setCurrentChapter: (chapter: Chapter | null) => void
-  addChapter: (chapter: Chapter) => void
-  updateChapter: (chapter: Chapter) => void
-  removeChapter: (id: number) => void
+  addOpenChapter: (chapter: Chapter) => void
+  closeChapter: (chapterId: number) => void
 }
 
 export const useAppStore = createWithEqualityFn<AppState>((set) => ({
-  // 初始状态
-  projects: [],
-  currentProject: null,
   error: null,
+
+  projects: [],
   chapters: [],
+
+  currentProject: null,
   currentChapter: null,
+  openChapters: [],
 
-  // 项目 Actions
-  setProjects: (projects) => set({ projects }),
-  setCurrentProject: (project) => set({ currentProject: project }),
   setError: (error) => set({ error }),
-  addProject: (project) => set((state) => ({ projects: [project, ...state.projects] })),
-  updateProject: (project) =>
-    set((state) => ({
-      projects: state.projects.map((p) => (p.id === project.id ? project : p)),
-      currentProject: state.currentProject?.id === project.id ? project : state.currentProject
-    })),
-  removeProject: (id) =>
-    set((state) => ({
-      projects: state.projects.filter((p) => p.id !== id),
-      currentProject: state.currentProject?.id === id ? null : state.currentProject
-    })),
-
-  // 章节 Actions
+  setProjects: (projects) => set({ projects }),
+  removeProject: (projectId) => set((state) => ({ projects: state.projects.filter((p) => p.id !== projectId) })),
   setChapters: (chapters) => set({ chapters }),
+  setCurrentProject: (project) => set({ currentProject: project }),
   setCurrentChapter: (chapter) => set({ currentChapter: chapter }),
-  addChapter: (chapter) => set((state) => ({ chapters: [...state.chapters, chapter] })),
-  updateChapter: (chapter) =>
-    set((state) => ({
-      chapters: state.chapters.map((c) => (c.id === chapter.id ? chapter : c)),
-      currentChapter: state.currentChapter?.id === chapter.id ? chapter : state.currentChapter
-    })),
-  removeChapter: (id) =>
-    set((state) => ({
-      chapters: state.chapters.filter((c) => c.id !== id),
-      currentChapter: state.currentChapter?.id === id ? null : state.currentChapter
-    }))
+  addOpenChapter: (chapter) => set((state) => ({
+    openChapters: state.openChapters.find(c => c.id === chapter.id) 
+      ? state.openChapters 
+      : [...state.openChapters, chapter]
+  })),
+  closeChapter: (chapterId) => set((state) => ({
+    openChapters: state.openChapters.filter(c => c.id !== chapterId)
+  }))
 }))

@@ -6,34 +6,48 @@
   "author": "",
   "license": "MIT",
   "scripts": {
-    "dev": "node scripts/electron-vite.js dev",
-    "build": "node scripts/electron-vite.js build",
-    "preview": "node scripts/electron-vite.js preview",
+    "dev": "npm run ensure:native && node scripts/electron-vite.js dev",
+    "build": "npm run ensure:native && node scripts/electron-vite.js build",
+    "preview": "npm run ensure:native && node scripts/electron-vite.js preview",
+    "ensure:native": "node scripts/ensure-native.js",
+    "rebuild:native": "electron-rebuild -f -w better-sqlite3",
+    "postinstall": "npm run ensure:native",
+    "test": "vitest",
     "build:win": "npm run build && electron-builder --win",
     "build:mac": "npm run build && electron-builder --mac",
     "build:linux": "npm run build && electron-builder --linux"
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.2",
-    "@anthropic-ai/claude-agent-sdk": "^0.1.76",
     "antd": "^5.22.6",
     "better-sqlite3": "^11.10.0",
     "dotenv": "^17.2.3",
+    "jszip": "^3.10.1",
+    "mammoth": "^1.11.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-markdown": "^10.1.0",
     "react-router-dom": "^6.30.2",
+    "remark-gfm": "^4.0.1",
     "use-sync-external-store": "^1.6.0",
     "zustand": "^5.0.9"
   },
   "devDependencies": {
+    "@electron/rebuild": "^4.0.2",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.1",
     "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^25.0.3",
     "@types/react": "^19.0.6",
     "@types/react-dom": "^19.0.2",
     "@vitejs/plugin-react": "^4.3.4",
     "electron": "^33.2.1",
     "electron-builder": "^25.1.8",
     "electron-vite": "^2.3.0",
+    "jsdom": "^27.4.0",
     "typescript": "^5.7.2",
-    "vite": "^5.4.11"
+    "vite": "^5.4.11",
+    "vitest": "^4.0.16"
   }
 }

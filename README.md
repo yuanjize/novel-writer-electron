@@ -131,9 +131,9 @@ ANTHROPIC_API_KEY=sk-ant-your-api-key-here
 
 `electron-vite` 会自动尝试下一个端口（例如 5174/5175/5176），属于正常现象。
 
-### 3) 构建时出现 “open is imported ... but never used”
+### 3) 构建时出现一些依赖 warning（例如 unused import）
 
-这是依赖包 `@anthropic-ai/claude-agent-sdk` 的构建 warning，一般不影响运行与打包。
+这类 warning 通常来自第三方依赖包，一般不影响运行与打包；如需排查请先确认应用功能是否正常。
 
 ## 项目结构（读代码用）
 

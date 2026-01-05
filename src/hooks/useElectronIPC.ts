@@ -110,6 +110,35 @@ export function useElectronIPC() {
       return response.data
     },
 
+    loadChapterVersions: async (chapterId: number, limit?: number) => {
+      const response = await window.electronAPI.chapter.getVersions(chapterId, limit)
+      if (!response.success) {
+        messageRef.current.error(response.error || '加载版本历史失败')
+        return []
+      }
+      return response.data || []
+    },
+
+    restoreChapterVersion: async (chapterId: number, versionId: number) => {
+      const response = await window.electronAPI.chapter.restoreVersion(chapterId, versionId)
+      if (!response.success) {
+        messageRef.current.error(response.error || '恢复版本失败')
+        return null
+      }
+      messageRef.current.success('已恢复到指定版本')
+      return response.data || null
+    },
+
+    createChapterSnapshot: async (chapterId: number, name?: string) => {
+      const response = await window.electronAPI.chapter.createSnapshot(chapterId, name)
+      if (!response.success) {
+        messageRef.current.error(response.error || '创建快照失败')
+        return null
+      }
+      messageRef.current.success('已创建新版本快照')
+      return response.data || null
+    },
+
     deleteChapter: async (id: number) => {
       const response = await window.electronAPI.chapter.delete(id)
       if (!response.success) {
@@ -125,12 +154,71 @@ export function useElectronIPC() {
       return window.electronAPI.ai.continueWriting(chapterId, context)
     },
 
-    improveText: async (chapterId: number, text: string) => {
-      return window.electronAPI.ai.improveText(chapterId, text)
+    improveText: async (
+      chapterId: number,
+      text: string,
+      options?: { intensity?: 'light' | 'standard' | 'strong'; focus?: 'general' | 'dialogue' | 'description' | 'pacing' }
+    ) => {
+      return window.electronAPI.ai.improveText(chapterId, text, options)
     },
 
     suggestPlot: async (projectId: number, context: { genre?: string; existingChapters?: string[] }) => {
       return window.electronAPI.ai.suggestPlot(projectId, context)
+    },
+
+    generateChapterTitle: async (params: { genre: string; projectDescription: string; previousChapters: string[]; chapterContent?: string }) => {
+      return window.electronAPI.ai.generateChapterTitle(params)
+    },
+
+    expandOutline: async (projectId: number, outline: string) => {
+      return window.electronAPI.ai.expandOutline({ projectId, outline })
+    },
+
+    rewriteWithCharacter: async (projectId: number, text: string, characterName: string) => {
+      return window.electronAPI.ai.rewriteWithCharacter({ projectId, text, characterName })
+    },
+
+    analyzeChapterEmotion: async (content: string) => {
+      return window.electronAPI.ai.analyzeChapterEmotion(content)
+    },
+
+    analyzeVersionDiff: async (versionId: number, previousVersionId?: number) => {
+      return window.electronAPI.ai.analyzeVersionDiff(versionId, previousVersionId)
+    },
+
+    reorderOutlines: async (items: { id: number; sequence: number }[]) => {
+      const response = await window.electronAPI.outline.reorder(items)
+      if (!response.success) {
+        messageRef.current.error(response.error || '排序失败')
+        return false
+      }
+      return true
+    },
+
+    // Storylines
+    loadStorylines: async (projectId: number) => {
+      const response = await window.electronAPI.storyline.getAll(projectId)
+      if (!response.success) return []
+      return response.data || []
+    },
+
+    createStoryline: async (storyline: any) => {
+      const response = await window.electronAPI.storyline.create(storyline)
+      if (!response.success) {
+        messageRef.current.error('创建故事线失败')
+        return null
+      }
+      return response.data
+    },
+
+    updateStoryline: async (id: number, updates: any) => {
+      const response = await window.electronAPI.storyline.update(id, updates)
+      return response.success ? response.data : null
+    },
+
+    deleteStoryline: async (id: number) => {
+      const response = await window.electronAPI.storyline.delete(id)
+      return response.success
     },
 
     // AI 配置管理
@@ -167,6 +255,56 @@ export function useElectronIPC() {
       if (!response.success) {
         return { available: false, configExists: false }
       }
+      return response.data
+    },
+
+    // 导出（Smart Export）
+    previewExport: async (params: { projectId: number; format: 'txt' | 'epub' | 'docx'; options?: any }) => {
+      const response = await window.electronAPI.export.preview(params)
+      if (!response.success) {
+        messageRef.current.error(response.error || '预览导出失败')
+        return null
+      }
+      return response.data || null
+    },
+
+    exportProject: async (params: { projectId: number; format: 'txt' | 'epub' | 'docx'; options?: any }) => {
+      const response = await window.electronAPI.export.exportProject(params)
+      if (!response.success) {
+        messageRef.current.error(response.error || '导出失败')
+        return null
+      }
+      messageRef.current.success(`已导出到：${response.data?.path || ''}`)
+      return response.data || null
+    },
+
+    getStats: async (projectId: number) => {
+      const response = await window.electronAPI.stats.getAll(projectId)
+      if (!response.success) {
+        return { history: [], today: 0 }
+      }
+      return response.data
+    },
+
+    // 导入
+    selectImportFile: async () => {
+      const response = await window.electronAPI.import.selectFile()
+      if (!response.success) {
+        if (response.error !== '已取消') {
+          messageRef.current.error(response.error || '读取文件失败')
+        }
+        return null
+      }
+      return response.data
+    },
+
+    importProject: async (data: any) => {
+      const response = await window.electronAPI.import.saveProject(data)
+      if (!response.success) {
+        messageRef.current.error(response.error || '导入失败')
+        return null
+      }
+      messageRef.current.success('导入成功！')
       return response.data
     }
   }), [])
